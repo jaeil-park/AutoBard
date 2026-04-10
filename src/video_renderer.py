@@ -63,10 +63,24 @@ class VideoRenderer:
     # ------------------------------------------------------------------
     @staticmethod
     def _resolve_font() -> str:
-        """Resolves the best available Korean-compatible font path."""
+        """Resolves the best available Korean-compatible font path for Win/Linux."""
+        # Linux (GitHub Actions / Ubuntu)
+        if os.name != 'nt':
+            linux_candidates = [
+                "/usr/share/fonts/truetype/nanum/NanumGothic.ttf",
+                "/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf",
+                "/usr/share/fonts/truetype/nanum/NanumMyeongjo.ttf",
+                "/usr/share/fonts/liberation/LiberationSans-Regular.ttf",
+            ]
+            for path in linux_candidates:
+                if os.path.exists(path):
+                    return path
+            return "DejaVu Sans" # Ubuntu default fallback
+
+        # Windows
         candidates = [
             r"C:\Windows\Fonts\NotoSansKR-VF.ttf",   # Noto Sans KR
-            r"C:\Windows\Fonts\malgun.ttf",           # Malgun Gothic (Good symbol support)
+            r"C:\Windows\Fonts\malgun.ttf",           # Malgun Gothic
             r"C:\Windows\Fonts\arialuni.ttf",         # Arial Unicode MS
             r"C:\Windows\Fonts\seguiemj.ttf",         # Segoe UI Emoji
         ]

@@ -22,8 +22,11 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: Install FFmpeg
-        uses: FedericoCarboni/setup-ffmpeg@v3
+      - name: Install FFmpeg and Fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-nanum ttf-mscorefonts-installer
+          sudo fc-cache -f -v
 
       - name: Install Dependencies
         run: |
