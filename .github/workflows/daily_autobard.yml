@@ -3,7 +3,7 @@ name: Daily AutoBard Production
 on:
   schedule:
     # Runs at 00:00 UTC (9:00 AM KST) daily
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
   workflow_dispatch: # Allows manual triggering from GitHub UI
 
 jobs:
@@ -19,8 +19,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          python-version: "3.11"
+          cache: "pip"
 
       - name: Install FFmpeg and Fonts
         run: |
@@ -52,6 +52,7 @@ jobs:
         run: |
           git config --global user.name "AutoBard Automator"
           git config --global user.email "autobard@github-actions.com"
-          git add temp/scheduler_state.json
+          # -f 옵션을 추가하여 .gitignore 설정을 무시하고 상태 파일을 강제로 추가합니다.
+          git add -f temp/scheduler_state.json
           git commit -m "Update scheduler state for next teaser [skip ci]" || echo "No changes to commit"
           git push
