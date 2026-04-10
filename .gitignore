@@ -1,0 +1,36 @@
+# Environments
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# Sensitive Credentials
+client_secret.json
+youtube_token.pickle
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Media and Temporary Files
+temp/
+output/
+*.mp3
+*.mp4
+*.srt
+*.png
+*.jpg
+*.jpeg
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project State
+# We will NOT ignore scheduler_state.json entirely because GitHub Actions 
+# needs to commit it back to maintain teaser continuity.
+# But we ignore locally generated ones if needed.
+# temp/scheduler_state.json is handled by the temp/ ignore rule above.
