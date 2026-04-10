@@ -25,17 +25,18 @@ class StoryGenerator:
         Create a STORY SCRIPT and METADATA serialized as JSON.
         
         JSON STRUCTURE:
-        - 'title': Catchy title
-        - 'script': The storytelling text with [📝 NARRATIVE] and [🗨️ DIALOGUE] tags.
+        - 'title': Catchy title (Language: Korean)
+        - 'script': The storytelling text with [📝 NARRATIVE] and [🗨️ DIALOGUE] tags. (Language: Korean)
         - 'genre': 'horror', 'legend', or 'folktale'
         - 'voice': 'fable' for horror, 'onyx' for legend/folktale, 'echo' for tense thriller.
         - 'speed': 0.85 (horror) to 1.0 (folktale)
-        - 'teaser_text': A 1-sentence hook for the NEXT episode.
+        - 'teaser_text': A 1-sentence hook for the NEXT episode. (Language: Korean)
         
         RULES:
         1. Script must be dramatic (500-800 characters).
-        2. Keep the 'Uncle Reader' persona but adjust tone for genre.
-        3. Teaser should be mysterious: "Next time: [Hook about next_topic]"
+        2. ALL Korean text must be natural, respectful (Uncle persona), and engaging.
+        3. Keep the 'Uncle Reader' persona but adjust tone for genre.
+        4. Teaser should be mysterious: "다음 이야기: [Hook about next_topic]"
         """
 
         user_input = f"Topic: {topic}. Next Topic: {next_topic or 'Unknown mysterious legend'}"
