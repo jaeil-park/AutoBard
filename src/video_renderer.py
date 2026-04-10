@@ -29,7 +29,7 @@ class VideoRenderer:
     OUTPUT_WIDTH = 1920
     OUTPUT_HEIGHT = 1080
     FPS = 30
-    SUBTITLE_FONT_SIZE = 32
+    SUBTITLE_FONT_SIZE = 50
     SUBTITLE_Y_RATIO = 0.85  # bottom 15% — top of bar at 85% of height
 
     def __init__(self, output_dir: str = "output"):
@@ -114,7 +114,7 @@ class VideoRenderer:
             font_size=self.SUBTITLE_FONT_SIZE,
             color="white",
             stroke_color="black",
-            stroke_width=2,
+            stroke_width=3,
             method="caption",
             size=(self.OUTPUT_WIDTH - 160, None),
         ).with_duration(duration)
@@ -220,6 +220,8 @@ class VideoRenderer:
             fps=self.FPS,
             codec="libx264",
             audio_codec="aac",
+            bitrate="12M",
+            preset="slow",
             logger=None,
         )
 
