@@ -92,21 +92,27 @@ class VideoRenderer:
     def _sanitize_text(self, text: str) -> str:
         """
         Cleans text for subtitles to avoid 'boxes' in video rendering.
+        - Removes metadata tags like [NARRATIVE].
         - Removes emojis via 'emoji' package.
         - Keeps Korean, English, numbers, and basic punctuation.
         """
-        # 1. Remove emojis
+        # 0. Remove bracketed tags like [📝 NARRATIVE] or [🗨️ DIALOGUE]
+        text = re.sub(r'\[.*?\]', '', text)
+        
+        # 1. Remove bare tags like NARRATIVE or DIALOGUE at the start
+        text = re.sub(r'^(NARRATIVE|DIALOGUE)[:\s]*', '', text, flags=re.IGNORECASE)
+
+        # 2. Remove emojis
         text = emoji.replace_emoji(text, replace='')
         
-        # 2. Keep only supported characters (Korean, Alphanumeric, Basic Symbols)
-        # re.sub logic to keep: \uac00-\ud7a3 (KR), a-zA-Z, 0-9, common punct
+        # 3. Keep only supported characters (Korean, Alphanumeric, Basic Symbols)
         pattern = re.compile(r'[^ \uac00-\ud7a3\u1100-\u11ff\u3130-\u318f가-힣a-zA-Z0-9\s.,!?\"\']+')
         cleaned = pattern.sub('', text)
         
         return cleaned.strip()
 
     def _make_subtitle_overlay(self, text: str, duration: float) -> TextClip:
-        """Creates a subtitle text clip with a drop-shadow effect."""
+        """Creates a subtitle text clip with a drop-shadow effect and safe positioning."""
         font_path = self._resolve_font()
         txt = TextClip(
             text=text,
@@ -116,10 +122,19 @@ class VideoRenderer:
             stroke_color="black",
             stroke_width=3,
             method="caption",
-            size=(self.OUTPUT_WIDTH - 160, None),
+            size=(self.OUTPUT_WIDTH - 240, None), # Increased horizontal margin
         ).with_duration(duration)
 
-        txt_y = int(self.OUTPUT_HEIGHT * self.SUBTITLE_Y_RATIO)
+        # Dynamic positioning: ensure text is centered in the bottom safe zone
+        # and doesn't bleed off the bottom edge.
+        target_center_y = int(self.OUTPUT_HEIGHT * 0.88)
+        txt_y = target_center_y - (txt.h // 2)
+        
+        # Safety: ensure at least 60px margin from bottom
+        safe_bottom_limit = self.OUTPUT_HEIGHT - 60
+        if (txt_y + txt.h) > safe_bottom_limit:
+            txt_y = safe_bottom_limit - txt.h
+
         txt = txt.with_position(("center", txt_y))
         return txt
 
